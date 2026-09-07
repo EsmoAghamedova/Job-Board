@@ -23,6 +23,13 @@ def prepare_job_form(form, job=None):
     return form
 
 
+def populate_job_fields(form, job):
+    for field_name in ("title", "short_description", "full_description",
+                       "company", "salary", "location"):
+        setattr(job, field_name, getattr(form, field_name).data)
+    job.category_id = form.category.data
+
+
 @jobs_bp.route("/new", methods=["GET", "POST"])
 @login_required
 def new_job():
@@ -137,12 +144,6 @@ def edit(job_id):
     form = prepare_job_form(JobForm(obj=job), job)
     if form.validate_on_submit():
         populate_job_fields(form, job)
-
-    def populate_job_fields(form, job):
-        for field_name in ("title", "short_description", "full_description",
-                           "company", "salary", "location"):
-            setattr(job, field_name, getattr(form, field_name).data)
-        job.category_id = form.category.data
         db.session.commit()
         current_app.logger.info("Job modified: %s by %s",
                                 job.id, current_user.email)
