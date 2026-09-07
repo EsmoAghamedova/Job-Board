@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %}
+  About | JobBoard
+{% endblock %}
+{% block content %}
+  <div class="about-page">
+    <section class="about-hero">
+      <div class="about-hero-copy">
+        <p class="eyebrow">ABOUT JOBBOARD</p>
+        <h1>A clearer way to find good work.</h1>
+        <p class="about-lead">JobBoard brings ambitious people and thoughtful teams into the same room, with less noise and more useful context.</p>
+      </div>
+      <figure class="about-image about-image-tall">
+        <img src="{{ url_for('static', filename='img/img1.jpg') }}" alt="JobBoard community" />
+        <figcaption>People, ideas, and opportunities moving forward.</figcaption>
+      </figure>
+    </section>
+
+    <section class="about-section about-split">
+      <div>
+        <p class="section-kicker">WHY WE BUILT IT</p>
+        <h2>Good opportunities deserve more than a quick scroll.</h2>
+      </div>
+      <div class="about-copy">
+        <p>Finding the right role is a personal decision. You want to understand the work, the team, the place, and the possibilities before you apply.</p>
+        <p>JobBoard keeps those details close at hand. Candidates can explore roles at their own pace, while teams can share the story behind an opportunity instead of reducing it to a list of keywords.</p>
+      </div>
+    </section>
+
+    <section class="about-section">
+      <div class="about-section-heading">
+        <p class="section-kicker">HOW IT WORKS</p><h2>Simple for both sides.</h2>
+      </div>
+      <div class="about-steps">
+        <article>
+          <span>01</span><h3>Explore</h3><p>Browse fresh roles by category and get the context behind each opportunity.</p>
+        </article>
+        <article>
+          <span>02</span><h3>Understand</h3><p>Open a full listing, meet the person who posted it, and decide if it feels right.</p>
+        </article>
+        <article>
+          <span>03</span><h3>Connect</h3><p>Share your own opportunity or follow the next step with a team you believe in.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="about-feature">
+      <figure class="about-image about-image-wide">
+        <img src="{{ url_for('static', filename='img/img2.gif') }}" alt="JobBoard in action" /><figcaption>A closer look at the energy behind better work.</figcaption>
+      </figure>
+      <div>
+        <p class="section-kicker">A BETTER SIGNAL</p><h2>Less clutter. More possibility.</h2><p>Every listing on JobBoard is an invitation to start a more considered conversation about work.</p><a class="btn btn-dark" href="{{ url_for('main.home') }}">Browse open roles <span aria-hidden="true">↗</span></a>
+      </div>
+    </section>
+  </div>
+{% endblock %}

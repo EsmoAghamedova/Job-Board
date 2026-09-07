@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}
+  Apply for {{ job.title }} | JobBoard
+{% endblock %}
+{% block content %}
+  <div class="application-shell">
+    <aside class="application-aside">
+      <a class="back-link" href="{{ url_for('jobs.detail', job_id=job.id) }}">← Back to role</a>
+      <p class="eyebrow">YOUR NEXT MOVE</p>
+      <h1>Apply with intention.</h1>
+      <p class="application-aside-copy">Share a little about yourself and let {{ job.company }} see what you could bring to the team.</p>
+      <div class="role-summary">
+        <span class="category-chip">{{ job.category }}</span>
+        <span class="category-chip">{{ job.category.name }}</span>
+        <h2>{{ job.title }}</h2>
+        <p>{{ job.company }}</p>
+        <div>
+          <span>{{ job.location }}</span><span>{{ job.salary }}</span>
+        </div>
+      </div>
+      <p class="application-note">Your CV and message will be sent privately to the person who posted this role.</p>
+    </aside>
+    <form method="post" enctype="multipart/form-data" class="form-panel application-form-panel">
+      {{ form.hidden_tag() }}
+      <div class="application-form-heading">
+        <div>
+          <p class="eyebrow">APPLICATION DETAILS</p><h2>Tell us about you.</h2>
+        </div><span class="form-step">01 / 01</span>
+      </div>
+      <div class="application-fields">
+        {% for field in [form.name, form.email, form.phone] %}
+          <div class="application-field">
+            {{ field.label(class='form-label') }}
+            {{ field(class='form-control') }}
+            {% for error in field.errors %}
+              <small class="text-danger d-block">{{ error }}</small>
+            {% endfor %}
+          </div>
+        {% endfor %}
+      </div>
+      <div class="application-field cv-field">
+        {{ form.cv.label(class='form-label') }}
+        <div class="cv-upload">
+          {{ form.cv(class='form-control') }}<span>PDF, DOC, or DOCX · Maximize your chances with a recent CV.</span>
+        </div>
+        {% for error in form.cv.errors %}
+          <small class="text-danger d-block">{{ error }}</small>
+        {% endfor %}
+      </div>
+      <div class="application-field">
+        {{ form.cover_letter.label(class='form-label') }}
+        {{ form.cover_letter(class='form-control', rows='7', placeholder='Tell the company why this role interests you...') }}
+        {% for error in form.cover_letter.errors %}
+          <small class="text-danger d-block">{{ error }}</small>
+        {% endfor %}
+      </div>
+      <div class="form-actions application-form-actions">
+        <a class="btn btn-outline-dark" href="{{ url_for('jobs.detail', job_id=job.id) }}">Cancel</a>{{ form.submit(class='btn btn-dark') }}
+      </div>
+    </form>
+  </div>
+{% endblock %}

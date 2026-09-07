@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}
+  Notifications | JobBoard
+{% endblock %}
+{% block content %}
+  <div class="notifications-page narrow">
+    <p class="eyebrow">YOUR UPDATES</p>
+    <h1>Notifications.</h1>
+    <p class="page-intro">You will find application decisions and other important updates here.</p>
+    {% for notification in notifications %}
+      <article class="notification-item">
+        <span class="notification-mark">✦</span><div>
+          <p>{{ notification.message }}</p><small>{{ notification.created_at.strftime('%b %d, %Y at %H:%M') }}</small>
+        </div>
+      </article>
+    {% else %}
+      <div class="empty-state">
+        <p class="section-kicker">ALL CAUGHT UP</p><h2>No notifications yet.</h2><p>When a company reviews your application, their decision will appear here.</p>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}

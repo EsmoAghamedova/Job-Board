@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}
+  Applications for {{ job.title }} | JobBoard
+{% endblock %}
+{% block content %}
+  <div class="applications-page">
+    <a class="back-link" href="{{ url_for('jobs.detail', job_id=job.id) }}">← Back to job</a>
+    <p class="eyebrow">RECRUITING INBOX</p>
+    <h1>Applications for {{ job.title }}.</h1>
+    <p class="page-intro">Review candidate information, read their message, and decide who should move forward.</p>
+    {% for application in applications %}
+      <article class="application-card">
+        <div class="application-header">
+          <div>
+            <h2>{{ application.name }}</h2><p>{{ application.email }} · {{ application.phone }}</p>
+          </div><span class="status-pill status-{{ application.status }}">{{ application.status }}</span>
+        </div>
+        <p class="application-date">Applied {{ application.created_at.strftime('%b %d, %Y at %H:%M') }}</p>
+        <div class="application-message">
+          <strong>Message</strong><p class="pre-line">{{ application.cover_letter }}</p>
+        </div>
+        <div class="application-actions">
+          <a class="btn btn-outline-dark" href="{{ url_for('jobs.download_cv', application_id=application.id) }}">Download CV</a>{% if application.status == 'pending' %}
+            <form method="post" action="{{ url_for('jobs.review_application', application_id=application.id, decision='approve') }}">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" /><button class="btn btn-dark" type="submit">Approve</button>
+            </form>
+            <form method="post" action="{{ url_for('jobs.review_application', application_id=application.id, decision='reject') }}">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" /><button class="btn btn-outline-danger" type="submit">Reject</button>
+            </form>
+          {% endif %}
+        </div>
+      </article>
+    {% else %}
+      <div class="empty-state">
+        <p class="section-kicker">NO APPLICATIONS YET</p><h2>Your candidate inbox is empty.</h2><p>Applications will appear here when someone applies.</p>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}

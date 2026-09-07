@@ -1,0 +1,28 @@
+  <div class="detail-heading"><div><span class="category-chip">{{ job.category.name }}</span>
+{% extends 'base.html' %}
+{% block title %}
+  {{ job.title }} | JobBoard
+{% endblock %}
+{% block content %}
+  <article class="detail-panel">
+    <a class="back-link" href="{{ url_for('main.home') }}">← All opportunities</a>
+    <div class="detail-heading"><div><span class="category-chip">{{ job.category }}</span><h1>{{ job.title }}</h1><p class="lead">{{ job.company }} · {{ job.location }} · {{ job.salary }}</p></div><div class="detail-date">Posted<br><strong>{{ job.date_posted.strftime('%b %d, %Y') }}</strong></div></div>
+    <div class="detail-author"><img class="profile-avatar" src="{{ url_for('static', filename='uploads/' ~ job.author.image_file) if job.author.image_file != 'default.jpg' else url_for('static', filename='img/default-avatar.svg') }}" alt="{{ job.author.name }} profile picture"><span>Posted by <a href="{{ url_for('auth.public_profile', user_id=job.user_id) }}">{{ job.author.name }}</a></span></div>
+    <hr />
+    <p class="pre-line">{{ job.full_description }}</p>
+    {% if current_user.is_authenticated and current_user.id != job.user_id %}
+      {% if application %}
+        <div class="application-status"><strong>Application sent.</strong><span>Status: {{ application.status|capitalize }}</span></div>
+      {% else %}
+        <a class="btn btn-dark" href="{{ url_for('jobs.apply', job_id=job.id) }}">Apply with your CV <span aria-hidden="true">↗</span></a>
+      {% endif %}
+    {% elif not current_user.is_authenticated %}
+      <a class="btn btn-dark" href="{{ url_for('auth.login') }}?next={{ url_for('jobs.apply', job_id=job.id) }}">Log in to apply</a>
+    {% endif %}
+    {% if current_user.is_authenticated and current_user.id == job.user_id %}
+      <div class="owner-actions"><a class="btn btn-dark" href="{{ url_for('jobs.applications', job_id=job.id) }}">View applications{% if job.applications %} ({{ job.applications|length }}){% endif %}</a><a class="btn btn-outline-dark" href="{{ url_for('jobs.edit', job_id=job.id) }}">Edit</a><form class="d-inline" method="post" action="{{ url_for('jobs.delete', job_id=job.id) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="btn btn-outline-danger" type="submit">Delete</button>
+      </form></div>
+    {% endif %}
+  </article>
+{% endblock %}
