@@ -1,8 +1,8 @@
-  <div class="detail-heading"><div><span class="category-chip">{{ job.category.name }}</span>
 {% extends 'base.html' %}
 {% block title %}
   {{ job.title }} | JobBoard
 {% endblock %}
+{% block page_class %}detail-page-shell{% endblock %}
 {% block content %}
   <article class="detail-panel">
     <a class="back-link" href="{{ url_for('main.home') }}">← All opportunities</a>

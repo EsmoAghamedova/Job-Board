@@ -16,6 +16,7 @@ body {
     background: var(--paper);
     color: var(--ink);
     font-family: "DM Sans", sans-serif;
+    overflow-x: hidden;
 }
 
 h1,
@@ -45,6 +46,15 @@ a {
     min-height: calc(100vh - 155px);
     padding-top: 4.5rem;
     padding-bottom: 6rem;
+}
+
+.detail-page-shell {
+    width: 100vw;
+    max-width: none;
+}
+
+.detail-page-shell .detail-panel {
+    max-width: 1180px;
 }
 
 .site-nav {
@@ -525,9 +535,10 @@ a {
 }
 
 .detail-panel {
+    width: 100%;
     max-width: 1080px;
     margin: 0 auto;
-    padding: clamp(1.5rem, 5vw, 4rem);
+    padding: clamp(1.5rem, 4vw, 3rem);
     background: var(--white);
     border: 1px solid var(--line);
 }
@@ -551,7 +562,7 @@ a {
 .detail-heading h1 {
     margin: 1rem 0 1.1rem;
     max-width: 680px;
-    font-size: clamp(2.35rem, 5vw, 4rem);
+    font-size: clamp(2rem, 3.5vw, 3rem);
     line-height: 1;
     letter-spacing: -.045em;
 }
