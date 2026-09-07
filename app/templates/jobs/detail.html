@@ -6,10 +6,20 @@
 {% block content %}
   <article class="detail-panel">
     <a class="back-link" href="{{ url_for('main.home') }}">← All opportunities</a>
-    <div class="detail-heading"><div><span class="category-chip">{{ job.category }}</span><h1>{{ job.title }}</h1><p class="lead">{{ job.company }} · {{ job.location }} · {{ job.salary }}</p></div><div class="detail-date">Posted<br><strong>{{ job.date_posted.strftime('%b %d, %Y') }}</strong></div></div>
+    <div class="detail-heading">
+      <div class="detail-heading-copy">
+        <span class="category-chip">{{ job.category.name }}</span>
+        <h1>{{ job.title }}</h1>
+        <p class="detail-meta"><span>{{ job.company }}</span><span>{{ job.location }}</span><span>{{ job.salary }}</span></p>
+      </div>
+      <div class="detail-date">Posted<strong>{{ job.date_posted.strftime('%b %d, %Y') }}</strong></div>
+    </div>
     <div class="detail-author"><img class="profile-avatar" src="{{ url_for('static', filename='uploads/' ~ job.author.image_file) if job.author.image_file != 'default.jpg' else url_for('static', filename='img/default-avatar.svg') }}" alt="{{ job.author.name }} profile picture"><span>Posted by <a href="{{ url_for('auth.public_profile', user_id=job.user_id) }}">{{ job.author.name }}</a></span></div>
     <hr />
-    <p class="pre-line">{{ job.full_description }}</p>
+    <section class="detail-description" aria-label="Job description">
+      <p class="section-kicker">THE ROLE</p>
+      <p class="pre-line">{{ job.full_description }}</p>
+    </section>
     {% if current_user.is_authenticated and current_user.id != job.user_id %}
       {% if application %}
         <div class="application-status"><strong>Application sent.</strong><span>Status: {{ application.status|capitalize }}</span></div>

@@ -525,7 +525,8 @@ a {
 }
 
 .detail-panel {
-    max-width: 900px;
+    max-width: 1080px;
+    margin: 0 auto;
     padding: clamp(1.5rem, 5vw, 4rem);
     background: var(--white);
     border: 1px solid var(--line);
@@ -548,13 +549,16 @@ a {
 }
 
 .detail-heading h1 {
-    margin: 1rem 0 .8rem;
-    max-width: 700px;
-    font-size: clamp(2.2rem, 5vw, 4.4rem);
-    line-height: .98;
+    margin: 1rem 0 1.1rem;
+    max-width: 680px;
+    font-size: clamp(2.35rem, 5vw, 4rem);
+    line-height: 1;
+    letter-spacing: -.045em;
 }
 
 .detail-date {
+    display: grid;
+    gap: .35rem;
     color: var(--muted);
     font-size: .8rem;
     text-align: right;
@@ -564,6 +568,21 @@ a {
 .detail-date strong {
     color: var(--ink);
     font-size: .95rem;
+}
+
+.detail-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .35rem 1rem;
+    margin: 0;
+    color: var(--muted);
+    font-size: 1rem;
+}
+
+.detail-meta span+span::before {
+    content: "·";
+    color: var(--cyan);
+    margin-right: 1rem;
 }
 
 .detail-author {
@@ -581,7 +600,19 @@ a {
 
 .detail-panel hr {
     border-color: var(--line);
-    margin: 2.5rem 0;
+    margin: 2.75rem 0 2.25rem;
+}
+
+.detail-description {
+    max-width: 720px;
+}
+
+.detail-description .section-kicker {
+    margin-bottom: 1rem;
+}
+
+.detail-description .pre-line {
+    margin-bottom: 0;
 }
 
 .application-status {
@@ -606,6 +637,12 @@ a {
     align-items: center;
     gap: .65rem;
     margin-top: 1.5rem;
+}
+
+.detail-panel>.btn,
+.detail-panel>.application-status,
+.detail-panel>.owner-actions {
+    margin-top: 2rem;
 }
 
 .applications-page,
