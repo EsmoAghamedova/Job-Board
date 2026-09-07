@@ -31,7 +31,7 @@ def upgrade():
     ))
     for name in ("IT", "Design", "Marketing", "Finance", "Sales", "Engineering", "Other"):
         connection.execute(sa.text(
-            "INSERT INTO category (name) SELECT :name "
+            "INSERT INTO category (name) SELECT CAST(:name AS VARCHAR(80)) "
             "WHERE NOT EXISTS (SELECT 1 FROM category WHERE category.name = :name)"
         ), {"name": name})
 
