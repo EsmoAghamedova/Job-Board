@@ -6,7 +6,12 @@ load_dotenv(os.path.join(basedir, ".env"))
 
 
 def database_url():
-    url = os.environ.get("DATABASE_URL", "sqlite:///app.db").strip()
+    url = os.environ.get("DATABASE_URL", "").strip()
+    running_on_render = os.environ.get("RENDER", "").lower() == "true"
+    if running_on_render and not url.startswith(("postgres://", "postgresql://", "postgresql+psycopg://")):
+        raise RuntimeError(
+            "DATABASE_URL must be configured with a PostgreSQL URL on Render")
+    url = url or "sqlite:///app.db"
     if url.startswith("postgres://"):
         url = url.replace("postgres://", "postgresql+psycopg://", 1)
     elif url.startswith("postgresql://"):
