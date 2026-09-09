@@ -1,3 +1,5 @@
+import json
+import time
 from urllib.error import URLError
 from urllib.request import Request, urlopen
 
@@ -9,6 +11,9 @@ from app.extensions import db
 from app.models import Category, Job
 
 main_bp = Blueprint("main", __name__)
+QUOTE_CACHE_SECONDS = 300
+_quote_cache = None
+_quote_cached_at = 0.0
 
 
 @main_bp.route("/")
@@ -69,14 +74,25 @@ def healthz():
 
 
 def get_quote():
+    global _quote_cache, _quote_cached_at
+    if _quote_cache is not None and time.monotonic() - _quote_cached_at < QUOTE_CACHE_SECONDS:
+        return _quote_cache
     try:
         request = Request(
-            "https://api.github.com/zen",
+            "https://dummyjson.com/quotes/random",
             headers={"User-Agent": "JobBoard"},
         )
         with urlopen(request, timeout=3) as response:
-            content = response.read().decode("utf-8").strip()
-            return {"content": content or "Build something useful.", "author": "GitHub"}
+            data = json.load(response)
+            _quote_cache = {
+                "content": data.get("quote", "Build something useful."),
+                "author": data.get("author", "JobBoard"),
+            }
     except (URLError, TimeoutError, ValueError, OSError) as error:
         current_app.logger.warning("API request error: %s", error)
-        return {"content": "Great work starts with a useful idea.", "author": "JobBoard"}
+        _quote_cache = {
+            "content": "Great work starts with a useful idea.",
+            "author": "JobBoard",
+        }
+    _quote_cached_at = time.monotonic()
+    return _quote_cache

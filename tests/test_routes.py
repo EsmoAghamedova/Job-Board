@@ -44,17 +44,20 @@ def test_server_error_page_is_rendered_and_logged(app, client, caplog):
 
 
 def test_external_api_success_is_rendered(app, monkeypatch):
-    response = io.BytesIO(b"Keep building.")
+    main_routes._quote_cache = None
+    response = io.BytesIO(
+        b'{"quote": "Keep building.", "author": "DummyJSON"}')
     monkeypatch.setattr(main_routes, "urlopen",
                         lambda request, timeout: response)
 
     with app.app_context():
         quote = main_routes.get_quote()
 
-    assert quote == {"content": "Keep building.", "author": "GitHub"}
+    assert quote == {"content": "Keep building.", "author": "DummyJSON"}
 
 
 def test_external_api_error_uses_fallback_and_logs(app, monkeypatch, caplog):
+    main_routes._quote_cache = None
     monkeypatch.setattr(
         main_routes,
         "urlopen",
