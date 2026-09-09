@@ -3,7 +3,7 @@
   Profile | JobBoard
 {% endblock %}
 {% block content %}
-  <form method="post" enctype="multipart/form-data" class="form-panel narrow">
+  <form method="post" enctype="multipart/form-data" class="form-panel narrow profile-form">
     {{ form.hidden_tag() }}
     <div class="profile-heading">
       <img class="profile-avatar profile-avatar-large" src="{{ url_for('static', filename='uploads/' ~ current_user.image_file) if current_user.image_file != 'default.jpg' else url_for('static', filename='img/default-avatar.svg') }}" alt="{{ current_user.name }} profile picture">

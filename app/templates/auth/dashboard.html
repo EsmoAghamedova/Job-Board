@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}
+  Dashboard | JobBoard
+{% endblock %}
+{% block content %}
+  <div class="dashboard-page">
+    <p class="eyebrow">YOUR JOB SEARCH</p>
+    <h1>Dashboard.</h1>
+    <p class="page-intro">Keep an eye on your applications, saved roles, and the next step in your search.</p>
+    <div class="dashboard-grid">
+      <section>
+        <div class="dashboard-section-heading">
+          <h2>Applications</h2><span>{{ applications|length }}</span>
+        </div>
+        {% for application in applications %}
+          <article class="application-card">
+            <div class="application-header">
+              <div>
+                <h2><a href="{{ url_for('jobs.detail', job_id=application.job_id) }}">{{ application.job.title }}</a></h2><p>{{ application.job.company }} · {{ application.job.location }}</p>
+              </div><span class="status-pill status-{{ application.status }}">{{ application.status }}</span>
+            </div>
+            <p class="application-date">Applied {{ application.created_at.strftime('%b %d, %Y') }}</p>
+          </article>
+        {% else %}
+          <div class="empty-state">
+            <p class="section-kicker">READY WHEN YOU ARE</p><h2>No applications yet.</h2><p>Find a role that feels like momentum and make your next move.</p><a class="btn btn-dark" href="{{ url_for('main.home') }}">Browse jobs</a>
+          </div>
+        {% endfor %}
+      </section>
+      <aside class="dashboard-side">
+        <section class="dashboard-summary">
+          <span class="section-kicker">SAVED ROLES</span><strong>{{ saved_jobs|length }}</strong><a href="{{ url_for('auth.saved_jobs') }}">View saved jobs <span aria-hidden="true">↗</span></a>
+        </section>
+        <section class="dashboard-summary">
+          <span class="section-kicker">UNREAD UPDATES</span><strong>{{ unread_notifications }}</strong><a href="{{ url_for('auth.notifications') }}">View notifications <span aria-hidden="true">↗</span></a>
+        </section>
+      </aside>
+    </div>
+  </div>
+{% endblock %}

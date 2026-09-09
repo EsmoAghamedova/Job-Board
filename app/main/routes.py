@@ -1,9 +1,10 @@
 import json
-import logging
 from urllib.error import URLError
 from urllib.request import urlopen
 
-from flask import Blueprint, current_app, render_template, request
+from flask import Blueprint, current_app, jsonify, render_template, request
+from sqlalchemy import or_
+from sqlalchemy.exc import SQLAlchemyError
 
 from app.extensions import db
 from app.models import Category, Job
@@ -14,19 +15,58 @@ main_bp = Blueprint("main", __name__)
 @main_bp.route("/")
 def home():
     category = request.args.get("category", "").strip()
-    query = Job.query.order_by(Job.date_posted.desc())
+    search = request.args.get("q", "").strip()
+    location = request.args.get("location", "").strip()
+    sort = request.args.get("sort", "newest").strip()
+    query = Job.query
     if category:
         query = query.join(Job.category).filter(Category.name == category)
+    if search:
+        pattern = f"%{search}%"
+        query = query.filter(or_(
+            Job.title.ilike(pattern),
+            Job.company.ilike(pattern),
+            Job.location.ilike(pattern),
+            Job.short_description.ilike(pattern),
+            Job.full_description.ilike(pattern),
+        ))
+    if location:
+        query = query.filter(Job.location.ilike(f"%{location}%"))
+    if sort == "oldest":
+        query = query.order_by(Job.date_posted.asc())
+    else:
+        sort = "newest"
+        query = query.order_by(Job.date_posted.desc())
     jobs = query.all()
     categories = [value[0] for value in db.session.query(
         Category.name).order_by(Category.name).all()]
     quote = get_quote()
-    return render_template("main/home.html", jobs=jobs, categories=categories, selected_category=category, quote=quote)
+    return render_template(
+        "main/home.html",
+        jobs=jobs,
+        categories=categories,
+        selected_category=category,
+        search=search,
+        location=location,
+        sort=sort,
+        quote=quote,
+    )
 
 
 @main_bp.route("/about")
 def about():
     return render_template("main/about.html")
+
+
+@main_bp.get("/healthz")
+def healthz():
+    try:
+        db.session.execute(db.text("SELECT 1"))
+        return jsonify(status="ok"), 200
+    except SQLAlchemyError as error:
+        db.session.rollback()
+        current_app.logger.error("Health check database error: %s", error)
+        return jsonify(status="error"), 503
 
 
 def get_quote():

@@ -9,7 +9,7 @@ from werkzeug.utils import secure_filename
 from app.auth.forms import (DeleteAccountForm, LoginForm, PasswordChangeForm,
                             ProfileForm, RegistrationForm)
 from app.extensions import db
-from app.models import Notification, User
+from app.models import Application, Notification, SavedJob, User
 
 auth_bp = Blueprint("auth", __name__)
 
@@ -150,3 +150,28 @@ def notifications():
         notification.is_read = True
     db.session.commit()
     return render_template("auth/notifications.html", notifications=user_notifications)
+
+
+@auth_bp.get("/dashboard")
+@login_required
+def dashboard():
+    applications = Application.query.filter_by(
+        applicant_id=current_user.id).order_by(Application.created_at.desc()).all()
+    saved_jobs = SavedJob.query.filter_by(
+        user_id=current_user.id).order_by(SavedJob.created_at.desc()).all()
+    unread_notifications = Notification.query.filter_by(
+        user_id=current_user.id, is_read=False).count()
+    return render_template(
+        "auth/dashboard.html",
+        applications=applications,
+        saved_jobs=saved_jobs,
+        unread_notifications=unread_notifications,
+    )
+
+
+@auth_bp.get("/saved-jobs")
+@login_required
+def saved_jobs():
+    saved = SavedJob.query.filter_by(
+        user_id=current_user.id).order_by(SavedJob.created_at.desc()).all()
+    return render_template("auth/saved_jobs.html", saved_jobs=saved)

@@ -21,13 +21,18 @@
       <p class="pre-line">{{ job.full_description }}</p>
     </section>
     {% if current_user.is_authenticated and current_user.id != job.user_id %}
-      {% if application %}
-        <div class="application-status"><strong>Application sent.</strong><span>Status: {{ application.status|capitalize }}</span></div>
-      {% else %}
-        <a class="btn btn-dark" href="{{ url_for('jobs.apply', job_id=job.id) }}">Apply with your CV <span aria-hidden="true">↗</span></a>
-      {% endif %}
+      <div class="detail-actions">
+        <form class="save-job-form" method="post" action="{{ url_for('jobs.toggle_saved_job', job_id=job.id) }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="btn btn-outline-dark" type="submit">{{ 'Remove saved job' if saved else 'Save job' }}</button>
+        </form>
+        {% if application %}
+          <div class="application-status"><strong>Application sent.</strong><span>Status: {{ application.status|capitalize }}</span></div>
+        {% else %}
+          <a class="btn btn-dark" href="{{ url_for('jobs.apply', job_id=job.id) }}">Apply with your CV <span aria-hidden="true">↗</span></a>
+        {% endif %}
+      </div>
     {% elif not current_user.is_authenticated %}
-      <a class="btn btn-dark" href="{{ url_for('auth.login') }}?next={{ url_for('jobs.apply', job_id=job.id) }}">Log in to apply</a>
+      <div class="detail-actions"><a class="btn btn-dark" href="{{ url_for('auth.login') }}?next={{ url_for('jobs.apply', job_id=job.id) }}">Log in to apply</a></div>
     {% endif %}
     {% if current_user.is_authenticated and current_user.id == job.user_id %}
       <div class="owner-actions"><a class="btn btn-dark" href="{{ url_for('jobs.applications', job_id=job.id) }}">View applications{% if job.applications %} ({{ job.applications|length }}){% endif %}</a><a class="btn btn-outline-dark" href="{{ url_for('jobs.edit', job_id=job.id) }}">Edit</a><form class="d-inline" method="post" action="{{ url_for('jobs.delete', job_id=job.id) }}">

@@ -221,7 +221,7 @@ a {
 }
 
 .detail-page-shell {
-    width: 100vw;
+    width: 100%;
     max-width: none;
 }
 
@@ -299,6 +299,9 @@ a {
 }
 
 .notification-badge {
+    position: absolute;
+    top: -.55rem;
+    right: -.7rem;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -310,6 +313,20 @@ a {
     color: var(--ink);
     font-size: .68rem;
     font-weight: 700;
+}
+
+.notification-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+}
+
+.notification-icon {
+    font-size: 1.15rem;
+    line-height: 1;
 }
 
 .nav-toggle {
@@ -408,6 +425,7 @@ a {
     display: flex;
     align-items: center;
     gap: .7rem;
+    flex-wrap: wrap;
 }
 
 .filter-form label {
@@ -418,6 +436,84 @@ a {
 
 .filter-form select {
     min-width: 150px;
+}
+
+.filter-form input {
+    min-width: 190px;
+}
+
+.filter-menu {
+    position: relative;
+}
+
+.filter-toggle {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    padding: .7rem 1rem;
+    border: 1px solid var(--line);
+    background: var(--white);
+    color: var(--ink);
+    cursor: pointer;
+    font-size: .85rem;
+    font-weight: 700;
+    list-style: none;
+}
+
+.filter-toggle:hover {
+    border-color: var(--cyan);
+}
+
+.filter-checkbox {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.filter-icon {
+    display: inline-grid;
+    gap: 3px;
+    width: 18px;
+}
+
+.filter-icon i {
+    display: block;
+    height: 2px;
+    background: currentColor;
+    transition: transform .2s ease, opacity .2s ease;
+}
+
+.filter-menu .filter-form {
+    display: none;
+    position: absolute;
+    z-index: 10;
+    top: calc(100% + .65rem);
+    right: 0;
+    width: min(720px, 70vw);
+    padding: 1rem;
+    border: 1px solid var(--line);
+    background: var(--white);
+    box-shadow: 8px 8px 0 #d9edf0;
+}
+
+.filter-checkbox:checked+.filter-toggle {
+    border-color: var(--cyan);
+}
+
+.filter-checkbox:checked+.filter-toggle .filter-icon i:nth-child(2) {
+    opacity: 0;
+}
+
+.filter-checkbox:checked+.filter-toggle .filter-icon i:first-child {
+    transform: translateY(5px) rotate(45deg);
+}
+
+.filter-checkbox:checked+.filter-toggle .filter-icon i:last-child {
+    transform: translateY(-5px) rotate(-45deg);
+}
+
+.filter-checkbox:checked~.filter-form {
+    display: flex;
 }
 
 .form-select,
@@ -572,6 +668,21 @@ a {
     padding: clamp(1.5rem, 4vw, 3rem);
 }
 
+.auth-form {
+    width: 100%;
+    margin-inline: auto;
+}
+
+.job-form {
+    width: 100%;
+    margin-inline: auto;
+}
+
+.profile-form {
+    width: 100%;
+    margin-inline: auto;
+}
+
 .application-shell {
     display: grid;
     grid-template-columns: minmax(240px, .7fr) minmax(0, 1.3fr);
@@ -620,6 +731,7 @@ a {
 
 .role-summary div {
     display: flex;
+    flex-wrap: wrap;
     gap: .7rem;
     margin-top: .7rem;
 }
@@ -643,6 +755,7 @@ a {
 
 .application-form-heading {
     display: flex;
+    flex-wrap: wrap;
     align-items: start;
     justify-content: space-between;
     gap: 1rem;
@@ -657,6 +770,7 @@ a {
 }
 
 .form-step {
+    margin-left: auto;
     color: var(--muted);
     font-size: .75rem;
     font-weight: 700;
@@ -688,6 +802,10 @@ a {
 .application-form-actions {
     justify-content: flex-end;
     padding-top: .5rem;
+}
+
+.application-form-actions .btn {
+    min-height: 44px;
 }
 
 .form-panel h1 {
@@ -878,6 +996,14 @@ a {
     color: var(--muted);
 }
 
+.detail-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .65rem;
+    margin-top: 2rem;
+}
+
 .owner-actions,
 .form-actions,
 .application-actions {
@@ -888,10 +1014,107 @@ a {
     margin-top: 1.5rem;
 }
 
-.detail-panel>.btn,
-.detail-panel>.application-status,
 .detail-panel>.owner-actions {
     margin-top: 2rem;
+}
+
+.save-job-form {
+    display: inline-block;
+    margin: 0;
+}
+
+.dashboard-page {
+    max-width: 1080px;
+}
+
+.dashboard-page>h1 {
+    margin: 1rem 0;
+    font-size: clamp(2.7rem, 6vw, 5rem);
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(220px, .6fr);
+    gap: 3rem;
+    margin-top: 3rem;
+}
+
+.dashboard-section-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--line);
+}
+
+.dashboard-section-heading h2 {
+    margin: 0 0 .8rem;
+}
+
+.dashboard-section-heading span {
+    color: var(--muted);
+    font-size: .85rem;
+}
+
+.dashboard-side {
+    display: grid;
+    align-content: start;
+    gap: 1rem;
+}
+
+.dashboard-summary {
+    display: grid;
+    gap: .6rem;
+    padding: 1.5rem;
+    background: var(--white);
+    border: 1px solid var(--line);
+}
+
+.dashboard-summary strong {
+    font: 600 3rem "Space Grotesk", sans-serif;
+}
+
+.dashboard-summary a {
+    color: var(--cyan-dark);
+    font-size: .85rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.saved-job-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    background: var(--white);
+    border: 1px solid var(--line);
+}
+
+.saved-job-card h2 {
+    margin: 1rem 0 .35rem;
+}
+
+.saved-job-card h2 a {
+    text-decoration: none;
+}
+
+.saved-job-card p {
+    margin: 0;
+    color: var(--muted);
+    font-size: .9rem;
+}
+
+.saved-job-card>div,
+.application-header>div {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.saved-job-card form,
+.application-actions form {
+    margin: 0;
 }
 
 .applications-page,
@@ -1007,6 +1230,7 @@ a {
 
 .pre-line {
     white-space: pre-line;
+    overflow-wrap: anywhere;
     font-size: 1.15rem;
     line-height: 1.7;
 }
@@ -1163,10 +1387,10 @@ a {
 .site-footer .container {
     display: flex;
     justify-content: space-between;
-    padding: 1.5rem 0;
+    padding-block: 1.5rem;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 991px) {
     .page-shell {
         padding-top: 2.8rem;
     }
@@ -1213,6 +1437,20 @@ a {
         margin-bottom: 3.5rem;
     }
 
+    .error-page {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        text-align: center;
+    }
+
+    .error-art {
+        width: min(58vw, 290px);
+    }
+
+    .error-copy {
+        margin: 0 auto;
+    }
+
     .toolbar {
         align-items: stretch;
         flex-direction: column;
@@ -1224,8 +1462,44 @@ a {
         flex-wrap: wrap;
     }
 
+    .filter-menu {
+        width: 100%;
+    }
+
+    .filter-toggle {
+        align-items: center;
+        justify-content: center;
+        gap: .6rem;
+        width: 100%;
+        padding: .8rem 1rem;
+        border: 1px solid var(--line);
+        background: var(--white);
+        color: var(--ink);
+        cursor: pointer;
+        font-size: .85rem;
+        font-weight: 700;
+        list-style: none;
+    }
+
+    .filter-menu .filter-form {
+        display: none;
+        position: static;
+        width: 100%;
+        padding: 1rem;
+        border: 1px solid var(--line);
+        border-top: 0;
+        background: var(--white);
+        box-shadow: none;
+    }
+
+    .filter-checkbox:checked~.filter-form {
+        display: grid;
+    }
+
+    .filter-form input,
     .filter-form select {
         flex: 1;
+        min-width: 140px;
     }
 
     .site-footer .container {
@@ -1250,9 +1524,29 @@ a {
         flex-direction: column;
     }
 
+    .application-actions {
+        align-items: stretch;
+    }
+
+    .application-actions .btn,
+    .application-actions form,
+    .application-actions form .btn {
+        width: 100%;
+    }
+
     .application-shell {
         grid-template-columns: 1fr;
         gap: 2rem;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .saved-job-card {
+        align-items: start;
+        flex-direction: column;
     }
 
     .application-aside {
@@ -1273,6 +1567,10 @@ a {
 
     .application-form-heading h2 {
         font-size: 1.6rem;
+    }
+
+    .application-form-actions {
+        justify-content: flex-start;
     }
 
     .about-hero,

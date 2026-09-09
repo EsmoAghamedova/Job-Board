@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}
+  Saved jobs | JobBoard
+{% endblock %}
+{% block content %}
+  <div class="applications-page">
+    <p class="eyebrow">YOUR SHORTLIST</p>
+    <h1>Saved jobs.</h1>
+    <p class="page-intro">The roles you want to come back to before making your next move.</p>
+    {% for saved in saved_jobs %}
+      <article class="saved-job-card">
+        <div>
+          <span class="category-chip">{{ saved.job.category.name }}</span><h2><a href="{{ url_for('jobs.detail', job_id=saved.job.id) }}">{{ saved.job.title }}</a></h2><p>{{ saved.job.company }} · {{ saved.job.location }} · {{ saved.job.salary }}</p>
+        </div>
+        <form method="post" action="{{ url_for('jobs.toggle_saved_job', job_id=saved.job.id) }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+          <input type="hidden" name="next" value="{{ url_for('auth.saved_jobs') }}" /><button class="btn btn-outline-dark" type="submit">Remove</button>
+        </form>
+      </article>
+    {% else %}
+      <div class="empty-state">
+        <p class="section-kicker">NOTHING SAVED YET</p><h2>Your shortlist is waiting.</h2><p>Save interesting roles while you explore the job board.</p><a class="btn btn-dark" href="{{ url_for('main.home') }}">Explore jobs</a>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}

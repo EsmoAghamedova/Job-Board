@@ -9,7 +9,7 @@ from werkzeug.utils import secure_filename
 
 from app.extensions import db
 from app.jobs.forms import ApplicationForm, JobForm
-from app.models import Application, Category, Job, Notification
+from app.models import Application, Category, Job, Notification, SavedJob
 
 jobs_bp = Blueprint("jobs", __name__)
 
@@ -50,10 +50,31 @@ def new_job():
 def detail(job_id):
     job = db.get_or_404(Job, job_id)
     application = None
+    saved = False
     if current_user.is_authenticated:
         application = Application.query.filter_by(
             job_id=job.id, applicant_id=current_user.id).first()
-    return render_template("jobs/detail.html", job=job, application=application)
+        saved = SavedJob.query.filter_by(
+            job_id=job.id, user_id=current_user.id).first() is not None
+    return render_template("jobs/detail.html", job=job,
+                           application=application, saved=saved)
+
+
+@jobs_bp.post("/<int:job_id>/save")
+@login_required
+def toggle_saved_job(job_id):
+    job = db.get_or_404(Job, job_id)
+    saved_job = SavedJob.query.filter_by(
+        job_id=job.id, user_id=current_user.id).first()
+    if saved_job:
+        db.session.delete(saved_job)
+        flash("Job removed from your saved jobs.", "info")
+    else:
+        db.session.add(SavedJob(job_id=job.id, user_id=current_user.id))
+        flash("Job saved for later.", "success")
+    db.session.commit()
+    return redirect(request.form.get("next") or url_for(
+        "jobs.detail", job_id=job.id))
 
 
 @jobs_bp.route("/<int:job_id>/apply", methods=["GET", "POST"])

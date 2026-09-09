@@ -19,6 +19,8 @@ class User(UserMixin, db.Model):
                                    cascade="all, delete-orphan")
     notifications = db.relationship("Notification", back_populates="user",
                                     cascade="all, delete-orphan")
+    saved_jobs = db.relationship("SavedJob", back_populates="user",
+                                 cascade="all, delete-orphan")
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -50,6 +52,22 @@ class Job(db.Model):
     category = db.relationship("Category", back_populates="jobs")
     applications = db.relationship("Application", back_populates="job",
                                    cascade="all, delete-orphan")
+    saved_by = db.relationship("SavedJob", back_populates="job",
+                               cascade="all, delete-orphan")
+
+
+class SavedJob(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False,
+                        index=True)
+    job_id = db.Column(db.Integer, db.ForeignKey("job.id"), nullable=False,
+                       index=True)
+    created_at = db.Column(db.DateTime, nullable=False,
+                           default=lambda: datetime.now(timezone.utc))
+    user = db.relationship("User", back_populates="saved_jobs")
+    job = db.relationship("Job", back_populates="saved_by")
+    __table_args__ = (db.UniqueConstraint("user_id", "job_id",
+                                          name="unique_saved_job"),)
 
 
 class Application(db.Model):

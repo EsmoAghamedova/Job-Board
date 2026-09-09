@@ -202,7 +202,7 @@ Populate a local database with repeatable demo users and jobs:
 python seed.py
 ```
 
-Demo login: `mariam.demo@mail.com` / `Mariam1234!`
+Demo login in render: `mariam.demo@mail.com` / `Mariam1234!`
 
 ---
 

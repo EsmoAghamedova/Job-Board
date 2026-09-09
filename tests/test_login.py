@@ -123,6 +123,6 @@ def test_settings_can_delete_account(app, client):
         follow_redirects=True,
     )
     assert b"Your account has been deleted." in response.data
-    assert b"Create account" in response.data
+    assert b"Register" in response.data
     with app.app_context():
         assert User.query.filter_by(email="ava@example.com").first() is None

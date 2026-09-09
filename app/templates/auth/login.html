@@ -3,7 +3,7 @@
   Login | JobBoard
 {% endblock %}
 {% block content %}
-  <form method="post" class="form-panel narrow">
+  <form method="post" class="form-panel narrow auth-form">
     {{ form.hidden_tag() }}<input type="hidden" name="next" value="{{ request.args.get('next', '') }}" /><h1>Welcome back.</h1>{% for field in [form.email, form.password] %}
       <div class="mb-3">
         {{ field.label(class='form-label') }}{{ field(class='form-control') }}{% for error in field.errors %}
