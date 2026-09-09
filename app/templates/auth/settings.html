@@ -32,7 +32,10 @@
         <input type="hidden" name="settings_action" value="password" />
         {% for field in [password_form.current_password, password_form.new_password, password_form.confirm_password] %}
           <div class="mb-3">
-            {{ field.label(class='form-label') }}{{ field(class='form-control') }}
+            {{ field.label(class='form-label') }}
+            <div class="password-input-wrap">
+              {{ field(class='form-control') }}<button class="password-toggle" type="button" data-password-target="{{ field.id }}" aria-label="Show password">Show</button>
+            </div>
             {% for error in field.errors %}
               <small class="text-danger d-block">{{ error }}</small>
             {% endfor %}
@@ -49,7 +52,10 @@
         {{ delete_form.hidden_tag() }}
         <input type="hidden" name="settings_action" value="delete" />
         <div class="mb-3">
-          {{ delete_form.password.label(class='form-label') }}{{ delete_form.password(class='form-control') }}
+          {{ delete_form.password.label(class='form-label') }}
+          <div class="password-input-wrap">
+            {{ delete_form.password(class='form-control') }}<button class="password-toggle" type="button" data-password-target="{{ delete_form.password.id }}" aria-label="Show password">Show</button>
+          </div>
           {% for error in delete_form.password.errors %}
             <small class="text-danger d-block">{{ error }}</small>
           {% endfor %}
@@ -58,4 +64,15 @@
       </form>
     </section>
   </div>
+  <script>
+    document.querySelectorAll('.password-toggle').forEach((toggle) => {
+      toggle.addEventListener('click', () => {
+        const input = document.getElementById(toggle.dataset.passwordTarget)
+        const showing = input.type === 'text'
+        input.type = showing ? 'password' : 'text'
+        toggle.textContent = showing ? 'Show' : 'Hide'
+        toggle.setAttribute('aria-label', `${showing ? 'Show' : 'Hide'} password`)
+      })
+    })
+  </script>
 {% endblock %}
