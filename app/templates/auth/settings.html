@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block title %}
+  Settings | JobBoard
+{% endblock %}
+{% block content %}
+  <div class="settings-page">
+    <div class="settings-heading">
+      <p class="eyebrow">Account</p>
+      <h1>Settings.</h1>
+      <p class="form-intro">Manage your account details and access.</p>
+    </div>
+
+    <section class="settings-section">
+      <h2>Change your name</h2>
+      <form method="post" class="settings-form">
+        {{ name_form.hidden_tag() }}
+        <input type="hidden" name="settings_action" value="name" />
+        <div class="mb-3">
+          {{ name_form.name.label(class='form-label') }}{{ name_form.name(class='form-control') }}
+          {% for error in name_form.name.errors %}
+            <small class="text-danger d-block">{{ error }}</small>
+          {% endfor %}
+        </div>
+        {{ name_form.submit(class='btn btn-dark', value='Save name') }}
+      </form>
+    </section>
+
+    <section class="settings-section">
+      <h2>Change your password</h2>
+      <form method="post" class="settings-form">
+        {{ password_form.hidden_tag() }}
+        <input type="hidden" name="settings_action" value="password" />
+        {% for field in [password_form.current_password, password_form.new_password, password_form.confirm_password] %}
+          <div class="mb-3">
+            {{ field.label(class='form-label') }}{{ field(class='form-control') }}
+            {% for error in field.errors %}
+              <small class="text-danger d-block">{{ error }}</small>
+            {% endfor %}
+          </div>
+        {% endfor %}
+        {{ password_form.submit(class='btn btn-dark') }}
+      </form>
+    </section>
+
+    <section class="settings-section settings-danger">
+      <h2>Delete account</h2>
+      <p>This permanently deletes your profile, jobs, applications, and notifications.</p>
+      <form method="post" class="settings-form" onsubmit="return confirm('Delete your account permanently?')">
+        {{ delete_form.hidden_tag() }}
+        <input type="hidden" name="settings_action" value="delete" />
+        <div class="mb-3">
+          {{ delete_form.password.label(class='form-label') }}{{ delete_form.password(class='form-control') }}
+          {% for error in delete_form.password.errors %}
+            <small class="text-danger d-block">{{ error }}</small>
+          {% endfor %}
+        </div>
+        {{ delete_form.submit(class='btn btn-outline-danger') }}
+      </form>
+    </section>
+  </div>
+{% endblock %}

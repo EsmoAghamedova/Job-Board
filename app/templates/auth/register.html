@@ -9,7 +9,44 @@
         {{ field.label(class='form-label') }}{{ field(class='form-control') }}{% for error in field.errors %}
           <small class="text-danger">{{ error }}</small>
         {% endfor %}
+        {% if field.name == 'password' %}
+          <div class="password-strength-wrap">
+            <div id="password-strength" class="password-strength" role="progressbar" aria-label="Password strength" aria-valuemin="0" aria-valuemax="6" aria-valuenow="0">
+              <span class="password-strength-segment"></span><span class="password-strength-segment"></span><span class="password-strength-segment"></span><span class="password-strength-segment"></span><span class="password-strength-segment"></span><span class="password-strength-segment"></span>
+            </div>
+          </div>
+        {% endif %}
       </div>
     {% endfor %}{{ form.submit(class='btn btn-dark') }}
   </form>
+  <script>
+    const passwordInput = document.getElementById('password')
+    const strengthMeter = document.getElementById('password-strength')
+    const strengthSegments = strengthMeter.querySelectorAll('.password-strength-segment')
+    
+    function passwordStrength(password) {
+      if (password.length < 8) return 0
+      const words = password.trim().split(/\s+/)
+      const isPassphrase = password.length >= 15 && words.length >= 5 && words.length <= 7 && words.every((word) => /^[a-zA-Z]+$/.test(word))
+      if (isPassphrase) return 5
+      if (password.length < 10) return 1
+      const characterTypes = [/[a-z]/.test(password), /[A-Z]/.test(password), /[0-9]/.test(password), /[^a-zA-Z0-9]/.test(password)].filter(Boolean).length
+      if (characterTypes >= 4) return password.length >= 15 ? 6 : 5
+      if (characterTypes >= 3) return 5
+      if (characterTypes >= 2) return 4
+      return 2
+    }
+    
+    function updatePasswordStrength() {
+      const strength = passwordStrength(passwordInput.value)
+      strengthMeter.className = `password-strength strength-${strength}`
+      strengthMeter.setAttribute('aria-valuenow', strength)
+      strengthSegments.forEach((segment, index) => {
+        segment.classList.toggle('active', index < strength)
+      })
+    }
+    
+    passwordInput.addEventListener('input', updatePasswordStrength)
+    updatePasswordStrength()
+  </script>
 {% endblock %}

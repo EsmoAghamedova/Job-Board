@@ -2,8 +2,21 @@
 {% block title %}
   Not found | JobBoard
 {% endblock %}
+{% block page_class %}
+  error-page-shell
+{% endblock %}
 {% block content %}
-  <div class="narrow">
-    <h1>404</h1><p>The page you requested does not exist.</p>
-  </div>
+  <section class="error-page">
+    <div class="error-art" aria-hidden="true">
+      <span class="error-orbit error-orbit-one"></span>
+      <span class="error-orbit error-orbit-two"></span>
+      <span class="error-core">404</span>
+    </div>
+    <div class="error-copy">
+      <p class="eyebrow">THE ROLE WENT MISSING</p>
+      <h1>Looks like this page took a career break.</h1>
+      <p>We searched everywhere. It may be networking, updating its CV, or pretending to be busy.</p>
+      <a class="btn btn-dark" href="{{ url_for('main.home') }}">Back to opportunities <span aria-hidden="true">↗</span></a>
+    </div>
+  </section>
 {% endblock %}

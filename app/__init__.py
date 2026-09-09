@@ -2,7 +2,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 import os
 
-from flask import Flask, render_template
+from flask import Flask, current_app, render_template
 
 from config import Config
 from app.extensions import db, migrate, login_manager, csrf
@@ -38,6 +38,8 @@ def create_app(config_class=Config):
 
     @app.errorhandler(500)
     def internal_error(error):
+        original_error = getattr(error, "original_exception", None) or error
+        current_app.logger.error("Unhandled server error: %s", original_error)
         db.session.rollback()
         return render_template("errors/500.html"), 500
 

@@ -1,4 +1,3 @@
-import os
 import shutil
 
 import pytest
@@ -37,11 +36,11 @@ def client(app):
     return app.test_client()
 
 
-def register(client, name, email, password="password123"):
+def register(client, name, email, password="LongPassword123!"):
     return client.post("/auth/register", data={"name": name, "email": email, "password": password, "confirm_password": password}, follow_redirects=True)
 
 
-def login(client, email, password="password123"):
+def login(client, email, password="LongPassword123!"):
     return client.post("/auth/login", data={"email": email, "password": password}, follow_redirects=True)
 
 

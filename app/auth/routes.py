@@ -6,7 +6,8 @@ from flask import Blueprint, current_app, flash, redirect, render_template, requ
 from flask_login import current_user, login_required, login_user, logout_user
 from werkzeug.utils import secure_filename
 
-from app.auth.forms import LoginForm, ProfileForm, RegistrationForm
+from app.auth.forms import (DeleteAccountForm, LoginForm, PasswordChangeForm,
+                            ProfileForm, RegistrationForm)
 from app.extensions import db
 from app.models import Notification, User
 
@@ -89,6 +90,49 @@ def profile():
             flash("Profile updated.", "success")
             return redirect(url_for("auth.profile"))
     return render_template("auth/profile.html", form=form)
+
+
+@auth_bp.route("/settings", methods=["GET", "POST"])
+@login_required
+def settings():
+    name_form = ProfileForm(obj=current_user)
+    password_form = PasswordChangeForm()
+    delete_form = DeleteAccountForm()
+
+    if request.method == "POST":
+        action = request.form.get("settings_action")
+        if action == "name" and name_form.validate():
+            current_user.name = name_form.name.data.strip()
+            db.session.commit()
+            flash("Name updated.", "success")
+            return redirect(url_for("auth.settings"))
+
+        if action == "password" and password_form.validate():
+            if not current_user.check_password(password_form.current_password.data):
+                password_form.current_password.errors.append(
+                    "Current password is incorrect.")
+            else:
+                current_user.set_password(password_form.new_password.data)
+                db.session.commit()
+                flash("Password changed.", "success")
+                return redirect(url_for("auth.settings"))
+
+        if action == "delete" and delete_form.validate():
+            if not current_user.check_password(delete_form.password.data):
+                delete_form.password.errors.append("Password is incorrect.")
+            else:
+                db.session.delete(current_user)
+                db.session.commit()
+                logout_user()
+                flash("Your account has been deleted.", "success")
+                return redirect(url_for("main.home"))
+
+    return render_template(
+        "auth/settings.html",
+        name_form=name_form,
+        password_form=password_form,
+        delete_form=delete_form,
+    )
 
 
 @auth_bp.route("/profile/<int:user_id>")

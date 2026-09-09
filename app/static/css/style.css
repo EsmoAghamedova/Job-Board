@@ -48,6 +48,178 @@ a {
     padding-bottom: 6rem;
 }
 
+.error-page-shell {
+    display: flex;
+    align-items: center;
+}
+
+.error-page {
+    display: grid;
+    grid-template-columns: minmax(210px, .7fr) minmax(0, 1.3fr);
+    gap: clamp(2rem, 8vw, 7rem);
+    align-items: center;
+    width: 100%;
+    max-width: 980px;
+    margin: 0 auto;
+}
+
+.error-copy {
+    max-width: 650px;
+}
+
+.error-copy h1 {
+    max-width: 650px;
+    margin: .9rem 0 1.25rem;
+    font-size: clamp(2.7rem, 6vw, 5.8rem);
+}
+
+.error-copy p:not(.eyebrow) {
+    max-width: 510px;
+    margin-bottom: 2rem;
+    color: var(--muted);
+    font-size: 1.08rem;
+    line-height: 1.65;
+}
+
+.error-art {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: min(30vw, 290px);
+    aspect-ratio: 1;
+    justify-self: center;
+    border: 1px solid #a8c8ce;
+    background: #dceff2;
+    transform: rotate(-8deg);
+    animation: error-float 5s ease-in-out infinite;
+}
+
+.error-art::before,
+.error-art::after {
+    position: absolute;
+    content: "";
+    width: 38%;
+    height: 5px;
+    background: var(--cyan);
+    animation: error-signal 1.8s ease-in-out infinite;
+}
+
+.error-art::before {
+    top: 21%;
+    left: 12%;
+}
+
+.error-art::after {
+    right: 12%;
+    bottom: 21%;
+    width: 24%;
+    animation-delay: -.8s;
+}
+
+.error-core {
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 46%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--ink);
+    color: white;
+    font: 700 clamp(1.7rem, 4vw, 2.7rem) "Space Grotesk", sans-serif;
+    letter-spacing: -.08em;
+    animation: error-pulse 2.2s ease-in-out infinite;
+}
+
+.error-orbit {
+    position: absolute;
+    border: 1px solid var(--cyan);
+    border-radius: 50%;
+    opacity: .8;
+}
+
+.error-orbit-one {
+    width: 72%;
+    height: 38%;
+    transform: rotate(38deg);
+    animation: error-orbit 7s linear infinite;
+}
+
+.error-orbit-two {
+    width: 38%;
+    height: 72%;
+    transform: rotate(-38deg);
+    animation: error-orbit 5s linear infinite reverse;
+}
+
+.error-page-server .error-art {
+    background: #f7e8dc;
+    border-color: #e0b89d;
+}
+
+.error-page-server .error-art::before,
+.error-page-server .error-art::after {
+    background: #d46b42;
+}
+
+.error-page-server .error-orbit {
+    border-color: #d46b42;
+}
+
+@keyframes error-float {
+
+    0%,
+    100% {
+        translate: 0 0;
+    }
+
+    50% {
+        translate: 0 -12px;
+    }
+}
+
+@keyframes error-pulse {
+
+    0%,
+    100% {
+        scale: 1;
+    }
+
+    50% {
+        scale: 1.08;
+    }
+}
+
+@keyframes error-signal {
+
+    0%,
+    100% {
+        scale: .45 1;
+        opacity: .35;
+    }
+
+    50% {
+        scale: 1 1;
+        opacity: 1;
+    }
+}
+
+@keyframes error-orbit {
+    to {
+        rotate: 360deg;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .error-art,
+    .error-art::before,
+    .error-art::after,
+    .error-core,
+    .error-orbit {
+        animation: none;
+    }
+}
+
 .detail-page-shell {
     width: 100vw;
     max-width: none;
@@ -528,10 +700,76 @@ a {
     margin-bottom: 2rem;
 }
 
+.settings-page {
+    max-width: 760px;
+}
+
+.settings-heading {
+    margin-bottom: 3rem;
+}
+
+.settings-heading h1 {
+    margin: .7rem 0 1rem;
+}
+
+.settings-section {
+    padding: 2rem 0;
+    border-top: 1px solid var(--line);
+}
+
+.settings-section h2 {
+    margin-bottom: 1.25rem;
+}
+
+.settings-form {
+    max-width: 520px;
+}
+
+.settings-danger h2 {
+    color: #a83c3c;
+}
+
+.settings-danger p {
+    color: var(--muted);
+    margin-bottom: 1.25rem;
+}
+
 .form-label {
     color: #425064;
     font-size: .85rem;
     font-weight: 700;
+}
+
+.password-strength-wrap {
+    margin-top: .55rem;
+}
+
+.password-strength {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 4px;
+    height: 6px;
+}
+
+.password-strength-segment {
+    height: 100%;
+    background: var(--line);
+    transition: background-color .2s ease;
+}
+
+.password-strength.strength-1 .password-strength-segment.active,
+.password-strength.strength-2 .password-strength-segment.active {
+    background: #d95757;
+}
+
+.password-strength.strength-3 .password-strength-segment.active,
+.password-strength.strength-4 .password-strength-segment.active {
+    background: #d99b32;
+}
+
+.password-strength.strength-5 .password-strength-segment.active,
+.password-strength.strength-6 .password-strength-segment.active {
+    background: #278b66;
 }
 
 .detail-panel {

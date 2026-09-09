@@ -2,8 +2,21 @@
 {% block title %}
   Server error | JobBoard
 {% endblock %}
+{% block page_class %}
+  error-page-shell
+{% endblock %}
 {% block content %}
-  <div class="narrow">
-    <h1>500</h1><p>Something went wrong on our side.</p>
-  </div>
+  <section class="error-page error-page-server">
+    <div class="error-art" aria-hidden="true">
+      <span class="error-orbit error-orbit-one"></span>
+      <span class="error-orbit error-orbit-two"></span>
+      <span class="error-core">500</span>
+    </div>
+    <div class="error-copy">
+      <p class="eyebrow">THE SERVER IS IN A MEETING</p>
+      <h1>Something went wrong on our side.</h1>
+      <p>No decisions were reached, but the team has been notified. Please give it another shot.</p>
+      <a class="btn btn-dark" href="{{ url_for('main.home') }}">Return to the job board <span aria-hidden="true">↗</span></a>
+    </div>
+  </section>
 {% endblock %}
