@@ -202,7 +202,7 @@ Populate a local database with repeatable demo users and jobs:
 python seed.py
 ```
 
-Demo login: `mariam.demo@jobboard.local` / `Demo123!`
+Demo login: `mariam.demo@mail.com` / `Mariam1234!`
 
 ---
 
@@ -210,7 +210,7 @@ Demo login: `mariam.demo@jobboard.local` / `Demo123!`
 
 This project is deployed and publicly accessible at:
 
-**Live URL:** _configure after deployment_
+**Live URL:** [JobBoard](https://job-board-1fwu.onrender.com/)
 
 Hosted on: `Render`
 
