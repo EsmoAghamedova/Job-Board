@@ -6,10 +6,29 @@
   <form method="post" class="form-panel narrow auth-form">
     {{ form.hidden_tag() }}<input type="hidden" name="next" value="{{ request.args.get('next', '') }}" /><h1>Welcome back.</h1>{% for field in [form.email, form.password] %}
       <div class="mb-3">
-        {{ field.label(class='form-label') }}{{ field(class='form-control') }}{% for error in field.errors %}
+        {{ field.label(class='form-label') }}
+        {% if field.type == 'PasswordField' %}
+          <div class="password-input-wrap">
+            {{ field(class='form-control') }}<button class="password-toggle" type="button" data-password-target="{{ field.id }}" aria-label="Show password">Show</button>
+          </div>
+        {% else %}
+          {{ field(class='form-control') }}
+        {% endif %}
+        {% for error in field.errors %}
           <small class="text-danger">{{ error }}</small>
         {% endfor %}
       </div>
     {% endfor %}{{ form.submit(class='btn btn-dark') }}
   </form>
+  <script>
+    document.querySelectorAll('.password-toggle').forEach((toggle) => {
+      toggle.addEventListener('click', () => {
+        const input = document.getElementById(toggle.dataset.passwordTarget)
+        const showing = input.type === 'text'
+        input.type = showing ? 'password' : 'text'
+        toggle.textContent = showing ? 'Show' : 'Hide'
+        toggle.setAttribute('aria-label', `${showing ? 'Show' : 'Hide'} password`)
+      })
+    })
+  </script>
 {% endblock %}

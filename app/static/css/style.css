@@ -65,6 +65,7 @@ a {
 
 .error-copy {
     max-width: 650px;
+    min-width: 0;
 }
 
 .error-copy h1 {
@@ -227,6 +228,10 @@ a {
 
 .detail-page-shell .detail-panel {
     max-width: 1180px;
+}
+
+.detail-heading-copy {
+    min-width: 0;
 }
 
 .site-nav {
@@ -489,7 +494,7 @@ a {
     z-index: 10;
     top: calc(100% + .65rem);
     right: 0;
-    width: min(720px, 70vw);
+    width: min(720px, calc(100vw - 2rem));
     padding: 1rem;
     border: 1px solid var(--line);
     background: var(--white);
@@ -514,6 +519,11 @@ a {
 
 .filter-checkbox:checked~.filter-form {
     display: flex;
+}
+
+.filter-form input,
+.filter-form select {
+    min-width: 0;
 }
 
 .form-select,
@@ -564,6 +574,7 @@ a {
 .job-topline,
 .job-footer {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
@@ -586,11 +597,13 @@ a {
 
 .job-card h2 {
     margin: 1.35rem 0 .55rem;
+    overflow-wrap: anywhere;
 }
 
 .job-company {
     color: var(--muted);
     font-size: .9rem;
+    overflow-wrap: anywhere;
 }
 
 .job-company span {
@@ -1214,6 +1227,12 @@ a {
     border-top: 1px solid var(--line);
 }
 
+.notification-item>div,
+.profile-heading>div {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
 .notification-mark {
     color: var(--cyan-dark);
     font-size: 1.4rem;
@@ -1278,6 +1297,8 @@ a {
 }
 
 .about-image {
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
     margin: 0;
     background: #dceff2;
     border: 1px solid #bfdde2;
@@ -1390,7 +1411,7 @@ a {
     padding-block: 1.5rem;
 }
 
-@media (max-width: 991px) {
+@media (max-width: 1099px) {
     .page-shell {
         padding-top: 2.8rem;
     }
@@ -1600,4 +1621,29 @@ a {
     .about-steps h3 {
         margin-top: 1.5rem;
     }
+}
+
+.password-input-wrap {
+    position: relative;
+}
+
+.password-input-wrap .form-control {
+    padding-right: 4.5rem;
+}
+
+.password-toggle {
+    position: absolute;
+    top: 50%;
+    right: .65rem;
+    transform: translateY(-50%);
+    border: 0;
+    background: transparent;
+    color: var(--cyan-dark);
+    cursor: pointer;
+    font-size: .78rem;
+    font-weight: 700;
+}
+
+.password-toggle:hover {
+    color: var(--ink);
 }
