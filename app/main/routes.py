@@ -1,6 +1,5 @@
-import json
 from urllib.error import URLError
-from urllib.request import urlopen
+from urllib.request import Request, urlopen
 
 from flask import Blueprint, current_app, jsonify, render_template, request
 from sqlalchemy import or_
@@ -71,9 +70,13 @@ def healthz():
 
 def get_quote():
     try:
-        with urlopen("https://api.quotable.io/random", timeout=3) as response:
-            data = json.load(response)
-            return {"content": data.get("content", "Build something useful."), "author": data.get("author", "Unknown")}
+        request = Request(
+            "https://api.github.com/zen",
+            headers={"User-Agent": "JobBoard"},
+        )
+        with urlopen(request, timeout=3) as response:
+            content = response.read().decode("utf-8").strip()
+            return {"content": content or "Build something useful.", "author": "GitHub"}
     except (URLError, TimeoutError, ValueError, OSError) as error:
         current_app.logger.warning("API request error: %s", error)
         return {"content": "Great work starts with a useful idea.", "author": "JobBoard"}

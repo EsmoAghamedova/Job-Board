@@ -44,21 +44,21 @@ def test_server_error_page_is_rendered_and_logged(app, client, caplog):
 
 
 def test_external_api_success_is_rendered(app, monkeypatch):
-    response_data = {"content": "Keep building.", "author": "JobBoard"}
-    response = io.BytesIO(json.dumps(response_data).encode())
-    monkeypatch.setattr(main_routes, "urlopen", lambda url, timeout: response)
+    response = io.BytesIO(b"Keep building.")
+    monkeypatch.setattr(main_routes, "urlopen",
+                        lambda request, timeout: response)
 
     with app.app_context():
         quote = main_routes.get_quote()
 
-    assert quote == response_data
+    assert quote == {"content": "Keep building.", "author": "GitHub"}
 
 
 def test_external_api_error_uses_fallback_and_logs(app, monkeypatch, caplog):
     monkeypatch.setattr(
         main_routes,
         "urlopen",
-        lambda url, timeout: (_ for _ in ()).throw(URLError("offline")),
+        lambda request, timeout: (_ for _ in ()).throw(URLError("offline")),
     )
 
     with app.app_context(), caplog.at_level(logging.WARNING, logger=app.logger.name):
