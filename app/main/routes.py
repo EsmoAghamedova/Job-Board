@@ -79,20 +79,20 @@ def get_quote():
         return _quote_cache
     try:
         request = Request(
-            "https://dummyjson.com/quotes/random",
+            "https://api.quotable.io/random?tags=inspirational%7Csuccess%7Cwisdom",
             headers={"User-Agent": "JobBoard"},
         )
         with urlopen(request, timeout=3) as response:
             data = json.load(response)
             _quote_cache = {
-                "content": data.get("quote", "Build something useful."),
+                "content": data.get("content", "Discipline turns consistent effort into progress."),
                 "author": data.get("author", "JobBoard"),
             }
     except (URLError, TimeoutError, ValueError, OSError) as error:
         current_app.logger.warning("API request error: %s", error)
         _quote_cache = {
-            "content": "Great work starts with a useful idea.",
-            "author": "JobBoard",
+            "content": "Success is the sum of small efforts, repeated day in and day out.",
+            "author": "Robert Collier",
         }
     _quote_cached_at = time.monotonic()
     return _quote_cache

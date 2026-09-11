@@ -2,7 +2,7 @@
 {% block content %}
 <section class="hero-row">
 	<div class="hero-copy"><p class="eyebrow">THE WORKPLACE, REIMAGINED</p><h1>Find work that feels like <em>momentum.</em></h1><p class="hero-intro">Explore thoughtful opportunities from teams building what comes next.</p></div>
-	<div class="hero-note"><span class="note-mark">✦</span><p>{{ quote.content }}</p><small>{{ quote.author }}</small></div>
+	<div class="hero-note"><p class="quote-kicker"><span class="note-mark">✦</span> WORK ETHIC NOTE</p><p class="quote-content">{{ quote.content }}</p><p class="quote-author">{{ quote.author }}</p></div>
 </section>
 <section class="toolbar" aria-label="Job search and filters">
 	<div><p class="section-kicker">LATEST OPPORTUNITIES</p><p class="result-count">{{ jobs|length }} open role{% if jobs|length != 1 %}s{% endif %}</p></div>
